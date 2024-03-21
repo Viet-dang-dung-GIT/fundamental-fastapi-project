@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "fundamental-fastapi-project"
+version = "0.1.0"
+description = ""
+authors = ["Viet-dang-dung-GIT <viet.info.43@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[tool.poetry.group.dev.dependencies]
+fastapi = {version = ">=0.110.0,<0.111.0", allow-prereleases = true}
+passlib = {version = ">=1.7.4,<1.8.0", allow-prereleases = true}
+pydantic = {version = ">=2.6.4,<2.7.0", allow-prereleases = true}
+sqlalchemy = {version = ">=2.0.28,<2.1.0", allow-prereleases = true}
+uvicorn = {version = ">=0.28.1,<0.29.0", allow-prereleases = true}
+alembic = {version = ">=1.13.1,<1.14.0", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
