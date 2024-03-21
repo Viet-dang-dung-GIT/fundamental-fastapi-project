@@ -1,24 +1,9 @@
 from pydantic import BaseModel
-
-
-class ItemBase(BaseModel):
-    title: str
-    description: str | None = None
-
-
-class ItemCreate(ItemBase):
-    pass
-
-
-class Item(ItemBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
+from typing import Optional
 
 
 class UserBase(BaseModel):
+    username: str
     email: str
 
 
@@ -28,8 +13,49 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
-    is_active: bool
-    items: list[Item] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class ProductBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    stock_quantity: int
+
+
+class Product(ProductBase):
+    id: int
+
+    class Config:
+        # orm_mode = True
+        from_attributes = True
+
+
+class PaymentBase(BaseModel):
+    amount: float
+    status: str
+    payment_method: str
+
+
+class PaymentCreate(PaymentBase):
+    user_id: int
+
+
+class Payment(PaymentBase):
+    id: int
+    user_id: int
+
+    class Config:
+        from_attributes = True
+
+
+class OrderBase(BaseModel):
+    quantity: int
+    total_price: float
+
+
+class OrderCreate(OrderBase):
+    user_id: int
+    product_id: int
