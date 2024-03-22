@@ -1,8 +1,8 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
+from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
 
 # create classes Base in database.py inherit that from it
-from .database import Base
+from app.crud.database import Base
 
 
 class User(Base):
