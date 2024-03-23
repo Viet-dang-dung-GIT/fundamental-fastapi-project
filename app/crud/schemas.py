@@ -18,6 +18,10 @@ class User(UserBase):
         from_attributes = True
 
 
+class UserDisable(UserBase):
+    disabled: bool | None = None
+
+
 class ProductBase(BaseModel):
     name: str
     description: Optional[str] = None
