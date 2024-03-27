@@ -1,14 +1,11 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
-
-# create classes Base in database.py inherit that from it
 from app.crud.database import Base
 
 
 class User(Base):
-    # __tablename__ is attribute tell SQLALCHEMY name table use in the database for each there database
-    __tablename__ = "users"
-    # this create model attribute/columns
+    __tablename__  = "users"
+
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
@@ -20,7 +17,7 @@ class User(Base):
 
 
 class Product(Base):
-    __tablename__ = "products"
+    __tablename__  = "products"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
@@ -35,7 +32,7 @@ class Product(Base):
 
 
 class Payment(Base):
-    __tablename__ = "payments"
+    __tablename__  = "payments"
 
     id = Column(Integer, primary_key=True, index=True)
     amount = Column(Float)
@@ -47,7 +44,7 @@ class Payment(Base):
 
 
 class Order(Base):
-    __tablename__ = "orders"
+    __tablename__  = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
     quantity = Column(Integer)

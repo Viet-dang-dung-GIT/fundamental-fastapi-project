@@ -21,9 +21,7 @@ async def user_exists(db: Session, username: str, email: str):
 async def create_user(db: Session, user: UserCreate):
     validate_email(user.email)
     await user_exists(db, user.username, user.email)
-    db_user = models.User(
-        db, username=user.username, email=user.email, password=hash_password(user.password)
-    )
+    db_user = models.User(username=user.username, email=user.email, password=hash_password(user.password))
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -31,7 +29,13 @@ async def create_user(db: Session, user: UserCreate):
 
 
 async def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User id: {user_id} not found"
+        )
+    return user
 
 
 async def get_users(db: Session, skip: int = 0, limit: int = 15):
@@ -39,23 +43,41 @@ async def get_users(db: Session, skip: int = 0, limit: int = 15):
 
 
 async def get_user_by_email(db: Session, user_email: str):
-    return db.query(models.User).filter(models.User.email == user_email).first()
+    user = db.query(models.User).filter(models.User.email == user_email).first()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User email {user_email} not found"
+        )
+    return user
 
 
 async def get_user_by_name(db: Session, user_name: str):
-    return db.query(models.User).filter(models.User.name == user_name).first()
+    user = db.query(models.User).filter(models.User.name == user_name).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User name {user_name} not found"
+        )
+    return user
 
 
 async def update_user(db: Session, user_id: int, user_data: UserCreate):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
+
     if db_user:
+        if "password" in user_data.dict():
+            user_data.password = hash_password(user_data.password)
         for key, value in user_data.dict().items():
             setattr(db_user, key, value)
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
         return db_user
-    return None
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"User id{user_id}:{user_data} not available"
+    )
 
 
 async def update_user_by_email(db: Session, user_email: str):
