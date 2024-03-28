@@ -1,11 +1,12 @@
+from starlette import status
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from starlette import status
+
 
 from app.crud import models
 from app.crud.schemas import UserCreate
-from app.service.security import hash_password
 from app.dependencies import validate_email
+from app.service.security import hash_password
 
 
 async def user_exists(db: Session, username: str, email: str):
@@ -38,6 +39,11 @@ async def get_user(db: Session, user_id: int):
     return user
 
 
+async def get_all_users(db: Session):
+    user = db.query(models.User).all()
+    return user
+
+
 async def get_users(db: Session, skip: int = 0, limit: int = 15):
     return db.query(models.User).offset(skip).limit(limit).all()
 
@@ -66,6 +72,8 @@ async def update_user(db: Session, user_id: int, user_data: UserCreate):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
 
     if db_user:
+        if "email" in user_data.dict():
+            user_data.email = validate_email(user_data.email)
         if "password" in user_data.dict():
             user_data.password = hash_password(user_data.password)
         for key, value in user_data.dict().items():
@@ -102,5 +110,5 @@ async def delete_user(db: Session, user_id: int):
     if db_user:
         db.delete(db_user)
         db.commit()
-        return True
+        return 'delete successfully'
     return False

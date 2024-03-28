@@ -1,4 +1,6 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from starlette import status
 
 from app.crud import models
 from app.crud.schemas import ProductBase
@@ -13,7 +15,10 @@ def create_product(db: Session, product: ProductBase):
 
 
 def get_product(db: Session, product_id: int):
-    return db.query(models.Product).filter(models.Product.id == product_id).first()
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if product is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+    return product
 
 
 def update_product(db: Session, product_id: int, product_data: ProductBase):
@@ -25,7 +30,7 @@ def update_product(db: Session, product_id: int, product_data: ProductBase):
         db.commit()
         db.refresh(db_product)
         return db_product
-    return None
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
 
 
 def delete_product(db: Session, product_id: int):
@@ -33,5 +38,5 @@ def delete_product(db: Session, product_id: int):
     if db_product:
         db.delete(db_product)
         db.commit()
-        return True
-    return False
+        return 'delete successfully'
+    raise HTTPException(status_code=404, detail="Product not found")
