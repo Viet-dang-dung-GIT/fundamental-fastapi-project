@@ -6,10 +6,10 @@ from app.crud.database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
+    username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password = Column(String, nullable=False)
 
     products = relationship("Product", back_populates="owner")
     payments = relationship("Payment", back_populates="user")
@@ -19,11 +19,11 @@ class User(Base):
 class Product(Base):
     __tablename__ = "products"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    id = Column(Integer, primary_key=True, nullable=False, index=True)
+    name = Column(String, index=True, nullable=False)
     description = Column(String)
-    price = Column(Float)
-    stock_quantity = Column(Integer)
+    price = Column(Float, nullable=False)
+    stock_quantity = Column(Integer, nullable=False)
 
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="products")
@@ -34,7 +34,7 @@ class Product(Base):
 class Payment(Base):
     __tablename__ = "payments"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
     amount = Column(Float)
     status = Column(String)
     payment_method = Column(String)
@@ -46,7 +46,7 @@ class Payment(Base):
 class Order(Base):
     __tablename__ = "orders"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False)
     quantity = Column(Integer)
     total_price = Column(Float)
 
