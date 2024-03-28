@@ -2,11 +2,15 @@ from starlette import status
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-
 from app.crud import models
 from app.crud.schemas import UserCreate
 from app.dependencies import validate_email
 from app.service.security import hash_password
+
+
+def check_username_exists(db: Session, username: str) -> bool:
+    existing_user = db.query(models.User).filter(models.User.username == username).first()
+    return existing_user is not None
 
 
 async def user_exists(db: Session, username: str, email: str):
@@ -41,6 +45,9 @@ async def get_user(db: Session, user_id: int):
 
 async def get_all_users(db: Session):
     user = db.query(models.User).all()
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="No any user create")
     return user
 
 
@@ -48,12 +55,12 @@ async def get_users(db: Session, skip: int = 0, limit: int = 15):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-async def get_user_by_email(db: Session, user_email: str):
-    user = db.query(models.User).filter(models.User.email == user_email).first()
+async def get_user_by_email(db: Session, email: str):
+    user = db.query(models.User).filter(models.User.email == email).first()
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User email {user_email} not found"
+            detail=f"User email {email} not found"
         )
     return user
 

@@ -10,11 +10,8 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-
-class UserUpdate(BaseModel):
-    username: str
-    email: str
-    password: str
+    class Config:
+        from_attributes: True
 
 
 class User(UserBase):
@@ -69,3 +66,35 @@ class OrderBase(BaseModel):
 class OrderCreate(OrderBase):
     user_id: int
     product_id: int
+
+
+class Login(BaseModel):
+    username: str
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: str
+
+
+class Order(BaseModel):
+    id: int
+    user_id: int
+    quantity: int
+    total_price: float
+    user: int
+
+    class Config:
+        from_attributes: True
+
+
+class Register(BaseModel):
+    username: str
+    email: str
+    password: str
+    repassword: str

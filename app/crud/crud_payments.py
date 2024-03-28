@@ -1,7 +1,18 @@
-from sqlalchemy.orm import Session
-
+from enum import Enum
 from app.crud import models
+from sqlalchemy.orm import Session
 from app.crud.schemas import PaymentBase
+
+
+class PaymentMethod(Enum):
+    CREDIT_CARD = "credit_card"
+    DEBIT_CARD = "debit_card"
+    E_WALLET = "e_wallet"
+    COD = "cash_on_delivery"
+    BANK_TRANSFER = "bank_transfer"
+    ONLINE_PAYMENT_GATEWAY = "online_payment_gateway"
+    CRYPTOCURRENCY = "cryptocurrency"
+    GIFT_CARD = "gift_card"
 
 
 def create_payment(db: Session, payment: PaymentBase):
@@ -35,3 +46,6 @@ def delete_payment(db: Session, payment_id: int):
         db.commit()
         return True
     return False
+
+
+

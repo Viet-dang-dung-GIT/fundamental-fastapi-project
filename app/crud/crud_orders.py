@@ -19,6 +19,7 @@ def get_order(db: Session, order_id: int):
 def get_orders_by_user(db: Session, user_id: int):
     return db.query(models.Order).filter(models.Order.user_id == user_id).all()
 
+
 def update_order(db: Session, order_id: int, order_data: OrderCreate):
     db_order = db.query(models.Order).filter(models.Order.id == order_id).first()
     if db_order:
