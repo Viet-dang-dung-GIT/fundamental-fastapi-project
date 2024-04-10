@@ -66,7 +66,7 @@ async def get_user_by_email(db: Session, email: str):
 
 
 async def get_user_by_name(db: Session, user_name: str):
-    user = db.query(models.User).filter(models.User.name == user_name).first()
+    user = db.query(models.User).filter(models.User.username == user_name).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
