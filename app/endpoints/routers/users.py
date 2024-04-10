@@ -28,8 +28,7 @@ async def read_user_by_id(user_id: int, db: Session = Depends(get_db),
 @router.get("/name/{user_name}")
 async def read_user(user_name: str, db: Session = Depends(get_db),
                     current_user: schemas.User = Depends(get_current_user)):
-    only_user = await crud.get_user_by_name(db, user_name)
-    return only_user
+    return await crud.get_user_by_name(db, user_name)
 
 
 @router.get("/email/{user_email}")
