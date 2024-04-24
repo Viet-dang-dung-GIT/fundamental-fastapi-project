@@ -43,7 +43,6 @@ class Product(ProductBase):
 class PaymentBase(BaseModel):
     amount: float
     status: str
-    payment_method: str
 
 
 class PaymentCreate(PaymentBase):
