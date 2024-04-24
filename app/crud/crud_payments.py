@@ -16,7 +16,8 @@ class PaymentMethod(Enum):
 
 
 def create_payment(db: Session, payment: PaymentBase):
-    db_payment = models.Payment(**payment.dict())
+    db_payment = models.Payment(amount=payment.amount, status=payment.status)
+    # db_payment = models.Payment(**payment.dict())
     db.add(db_payment)
     db.commit()
     db.refresh(db_payment)
@@ -46,6 +47,3 @@ def delete_payment(db: Session, payment_id: int):
         db.commit()
         return True
     return False
-
-
-
