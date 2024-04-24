@@ -1,7 +1,7 @@
 import time
 
 # from .dependencies import get_query_token, get_token_header
-from app.endpoints.routers import users, products
+from app.endpoints.routers import users, products, payments
 from .service import auth
 from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
@@ -23,6 +23,7 @@ async def add_process_time_header(request: Request, call_next):
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(products.router)
+app.include_router(payments.router)
 
 
 # app.include_router(

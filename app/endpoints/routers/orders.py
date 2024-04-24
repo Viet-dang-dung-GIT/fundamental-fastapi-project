@@ -3,11 +3,12 @@ from starlette import status
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, requests
 
-from app.crud.database import get_db
 from ...crud import schemas
+from app.crud.database import get_db
 from ...service.oauth2 import get_current_user
-from app.crud.crud_orders import get_order, get_orders_by_user, create_order
 from app.crud.crud_products import get_product
+from app.crud.crud_orders import get_order, get_orders_by_user, create_order
+
 
 router = APIRouter(
     prefix="orders",
